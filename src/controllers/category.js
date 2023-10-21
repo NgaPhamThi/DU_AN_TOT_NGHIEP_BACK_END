@@ -3,7 +3,8 @@ import Category from "../models/category";
 import Product from "../models/product";
 
 const categorySchema = Joi.object({
-    name: Joi.string().required(),  
+    name: Joi.string().required(),
+    img: Joi.string().required(),   
 });
 
 export const getAll = async (req, res) => {

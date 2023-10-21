@@ -1,7 +1,6 @@
 import Joi from "joi";
 
 const voucherSchema = Joi.object({
-  Voucher_ID: Joi.number().required(),
   Voucher_Code: Joi.string().max(255).required(),
   Discount_Type: Joi.string().max(255).required(),
   Expiration_Date: Joi.date().required(),

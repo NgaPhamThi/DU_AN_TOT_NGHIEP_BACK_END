@@ -8,16 +8,17 @@ const commentSchema = new mongoose.Schema({
     },
     userId:{
        type: mongoose.Types.ObjectId,
+       ref: 'User',
        required: true
     },
     productId:{
         type: mongoose.Types.ObjectId,
-        ref:'product',
+        ref:'products',
         required:true
-    },
-    createAt:{
-        type: Date,
-        default: Date.now
-    }
+    }    
+},
+{
+    timestamps: true,
+    versionKey: false
 })
 export default mongoose.model('comment',commentSchema)

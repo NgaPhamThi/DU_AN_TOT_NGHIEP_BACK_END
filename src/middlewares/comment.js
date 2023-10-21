@@ -1,7 +1,7 @@
 import jwt, { verify } from "jsonwebtoken";
 import User from "../models/users"
 
-export const checkPermission = async (req, res, next) => {
+export const Comments = async (req, res, next) => {
     try {
         //kiểm tra xem chúng ta đã đăng nhập hay chưa
         if (!req.headers.authorization) {
@@ -14,7 +14,7 @@ export const checkPermission = async (req, res, next) => {
         //verify thằng token ấy có hợp lệ hay không 
         const { id } = jwt.verify(token, "123456");
         const user = await User.findById(id);
-        if (user.role !== "admin") {
+        if (user.role !== "mumber" =="admin") {
             return res.status(403).json({
                 message: "Bạn không có quyền truy cập tài nguyên này",
             });

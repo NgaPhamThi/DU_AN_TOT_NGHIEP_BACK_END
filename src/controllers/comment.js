@@ -1,42 +1,65 @@
 
 import comment from '../models/comment';
-// import user from '../models/user';
+import { CommentSchema } from '../schemas/comment';
 
-export const createComment = async (req, res)=>{
-   try {
-    const {content, userId,productId}=req.body;
-    const currentDateTime = new Date()
-    const comments = new comment({
-        content,
-        userId,
-        productId,
-        createAt: currentDateTime
-    })
-    await comments.save();
-    const users = await user.findById(userId)
-    return res.status(201).json({
-        message:"Bình luận thành công",
-        comments,
-        commenterName:users?users.name:"Người dùng không tồn tại"
-    });
-   } catch (error) {
-    return res.status(500).json({
-        message:"Lỗi",
-        error:error.message
-    })
-   }
-}
-export const getCommentsByProductId = async(req,res)=>{
+export const createComment = async (req, res) => {
     try {
-        const {productId}=req.params;
-        const comments = await comment.find({productId});
+        const { error } = CommentSchema.validate(req.body, { abortEarly: false })
+        if (error) {
+            return res.status(400).json({
+                message: error.details.map(err => err.message)
+            })
+        }
+        const comments = await comment.create(req.body)
+
+        return res.status(201).json({
+            message: "Bình luận thành công",
+            comments,
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Lỗi",
+            error: error.message
+        })
+    }
+}
+export const getCommentsByProductId = async (req, res) => {
+    try {
+        const comments = await comment.find({ productId: req.params.id }).populate('userId', 'username').exec()
         return res.status(200).json({
-            comments
+            comments,
+
         })
     } catch (error) {
         return res.status(500).json({
             message: "Lỗi",
             error: error.message
+        })
+    }
+}
+export const removecomment = async (req, res) => {
+    try {
+        const comments = await comment.findByIdAndDelete(req.params.id)
+        return res.status(201).json({
+            message: "Xóa Thành Công",
+            comments
+        })
+    } catch (error) {
+        return res.status(404).json({
+            message: error
+        })
+    }
+}
+export const updatecomment = async (req, res) => {
+    try {
+        const comments = await comment.findOneAndUpdate({ _id: req.params.id }, req.body)
+        return res.status(201).json({
+            message: "Cập Nhật Thành Công",
+            comments
+        })
+    } catch (error) {
+        return res.status(401).json({
+            message: error
         })
     }
 }

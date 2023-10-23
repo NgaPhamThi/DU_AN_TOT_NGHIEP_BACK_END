@@ -4,7 +4,7 @@ import { checkPermission } from "../middlewares/checkpermission";
 import { Comments } from "../middlewares/comment";
 const router = express.Router();
 router.get("/comment/:id",getCommentsByProductId)
-router.post("/comment",Comments,createComment)
+router.post("/comment",createComment)
 router.delete("/comment/:id",checkPermission,removecomment)
 router.put("/comment/:id",checkPermission,updatecomment)
 export default router

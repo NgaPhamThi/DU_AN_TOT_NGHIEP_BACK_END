@@ -3,7 +3,8 @@ const orderStatus = [
     'chờ duyệt',
     'lấy hàng',
     'đang giao',
-    'giao hàng thành công'
+    'giao hàng thành công',
+    'Hủy đơn hàng'
   ];
 const ordersSchema = new mongoose.Schema({
     userId:{

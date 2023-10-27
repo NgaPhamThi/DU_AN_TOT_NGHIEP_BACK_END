@@ -2,7 +2,8 @@ const orderStatus = [
     'chờ duyệt',
     'lấy hàng',
     'đang giao',
-    'giao hàng thành công'
+    'giao hàng thành công',
+    'Hủy đơn hàng'
   ];
   export const validateOrder =(req,res,next)=>{
     const {userId,status,address,orderTotal} =req.body

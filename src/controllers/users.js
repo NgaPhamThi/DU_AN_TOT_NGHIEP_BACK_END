@@ -1,100 +1,101 @@
 import User from "../models/users";
 import bcrypt from "bcryptjs";
-import Joi from "joi";
 import jwt from "jsonwebtoken";
-// import dotenv from "dotenv";
-
-// dotenv.config();
-import { signinSchema, signupSchema } from "../schemas/users";
+import {  siginSchema, signupSchema } from "../schemas/users";
 
 export const signup = async (req, res) => {
   try {
-    
-    const { error } = signupSchema.validate(req.body, { abortEarly: false });
-
-    if (error) {
-      const errors = error.details.map((err) => err.message);
-      return res.status(400).json({
-        message: errors,
+      //validate tất cả các trường trước 
+      const { error } = signupSchema.validate(req.body, { abortEarly: false });
+      //nếu có lỗi tạo ra một cái mảng mới chứa tất cả các mesage này
+      if (error) {
+          const errors = error.details.map((err) => err.message);
+          //trả về phía client
+          return res.status(400).json({
+              message: errors,
+          });
+      }
+      // Kiểm tra xem user đã đk chưa?
+      const userExist = await User.findOne({ email: req.body.email });
+      //nếu đăng kí rồi thông báo trả ra cho client
+      if (userExist) {
+          return res.status(400).json({
+              message: "Email đã tồn tại",
+          });
+      }
+      //nếu chưa đăng kí chúng ta mã hóa mật khẩu bằng bcrypt
+      // Mã hóa mật khẩu
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      //tạo một use mới chứa thông tin name,email từ phía client gửi lên 
+      //có phần password sẽ lấy hashedpassword gắn vào 
+      const user = await User.create({
+          name: req.body.name,
+          email: req.body.email,
+          password: hashedPassword,
       });
-    }
 
-    // kiểm tra tồn tại email
+      // Tạo token
+      const token = jwt.sign({ id: user._id }, "123456", { expiresIn: "1d" });
+      //sau khi tạo user xong trả về client và không bao gồm phần password
+      // không trả về password
+      user.password = undefined;
 
-    const userExist = await User.findOne({ email: req.body.email });
-    if (userExist) {
-      return res.status(400).json({
-        message: "Email đã tồn tại",
+      return res.status(201).json({
+          message: "Tạo tài khoản thành công",
+          accessToken: token,
+          user,
       });
-    }
-
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = await User.create({
-      username:req.body.username,
-      email:req.body.email,
-      password: hashedPassword,
-    });
-
-  
-    // tạo token từ server
-    const token = jwt.sign({ id: user._id }, "123456",{expiresIn:"1d"});
-    user.password = undefined;
-    return res.status(201).json({
-      message: "Đăng ký thành công",
-      accessToken: token,
-      user,
-    });
   } catch (error) {
-    return res.status(400).json({
-      message:error
-    })
+      return res.status(400).json({
+          message: error,
+      });
   }
 };
-
-const userSignin = Joi.object({
-  email: Joi.string().email().required(),
-  password: Joi.string().min(7).required(),
-});
-
+//đăng nhập
 export const signin = async (req, res) => {
   try {
-    const { email, password } = req.body;
-    const { error } = signinSchema.validate(req.body, { abortEarly: false });
+      const { email, password } = req.body
+      const { error } = siginSchema.validate(req.body, { abortEarly: false });
+      if (error) {
+          return res.status(400).json({
+              message: error.details.map((err) => err.message)
+          })
+      }
+      //kiem tra xem user da dang ki chua 
+      const user = await User.findOne({ email })
+      if (!user) {
+          return res.status.json({
+              message: "email không tồn tại"
+          })
+      }
+      // so sánh mật khẩu
+      const isMatch = await bcrypt.compare(password, user.password)
+      if (!isMatch) {
+          return res.status(400).json({
+              message: "mật khẩu không đúng"
+          })
+      }
 
-    if (error) {
-      return res.status(400).json({
-        message: error.details.map((err) => err.message),
-      });
-    }
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status.json({
-        message: "Tài khoản không tồn tại",
-      });
-    }
-    // nó vừa mã hóa và vừa so sánh
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({
-        message: "Sai mật khẩu",
-      });
-    }
+      const token = jwt.sign({ id: user._id }, "123456", { expiresIn: "1d" })
 
-    // tạo token từ server
-    const token = jwt.sign({ _id: user._id },"1234567",{expiresIn:"1d"});
-    user.password = undefined;
+      user.password = undefined
+      return res.status(200).json({
+          message: "dang nhap thanh cong",
+          accessToken: token,
+          user
+      })
 
-    return res.status(201).json({
-      message: "Đăng nhập thành công",
-      accessToken: token,
-      user,
-    });
+
+
   } catch (error) {
-    return res.status(400).json({
-      message:error
-    })
+
+      return res.status(400).json({
+          message: error
+      })
+
   }
-};
+
+}
 
 
 export const getUser = async (req, res) => {

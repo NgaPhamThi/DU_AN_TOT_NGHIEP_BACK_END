@@ -6,9 +6,13 @@ const categorySchema = new mongoose.Schema({
         type : String,
         require : true,
     },
-    img:{
-        type: String,
-        require:true
-    }
+    img:[
+        {
+            url:{
+                type: String,
+                require:true
+            }
+        }
+    ]
 });
 export default mongoose.model("Category", categorySchema);

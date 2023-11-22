@@ -1,29 +1,64 @@
+import OderDetail from "../models/Oder_detail";
 import Order from "../models/orders";
 import { OrdersSchema } from "../schemas/orders";
 
-export const createOrder = async (req, res) => {
+// export const createOrder = async (req, res) => {
+//   try {
+//     const { error } = OrdersSchema.validate(req.body, { abortEarly: false });
+//     if (error) {
+//       return res.status(400).json({
+//         message: error.details.map((err) => err.message),
+//       });
+//     }
+//     const newOrders = await Order.create(req.body);
+//     return res.status(200).json({
+//       message: "Order Thành Công",
+//       newOrders,
+//   });
+//   } catch (error) {
+//     res.status(400).json({
+//       error: error.message,
+//     });
+//   }
+// };
+export const CreateOrder = async (req, res) => {
   try {
     const { error } = OrdersSchema.validate(req.body, { abortEarly: false });
     if (error) {
       return res.status(400).json({
-        message: error.details.map((err) => err.message),
+       message: error.details.map((err) => err.message),
       });
     }
-    const newOrders = new Order(req.body);
-    await newOrders.save();
-    res.status(200).json({
-      message: "Order Thanh cong",
-      newOrders,
+    const { userId, fullname, phonenumber, address, orderTotal, orderDetails } = req.body;
+
+    const newOrder = new Order({
+      userId,
+      fullname,
+      phonenumber,
+      address,
+      orderTotal,
     });
+    await newOrder.save();
+    await Promise.all(orderDetails.map(async (detail) => {
+      const orderDetail = new OderDetail({
+        orderId: newOrder._id,
+        productId: detail.productId,
+        quantity: detail.quantity,
+        price: detail.price,
+        sizeId: detail.sizeId,
+        colorId: detail.colorId
+      });
+      await orderDetail.save();
+    }));
+
+    res.status(201).json(newOrder);
   } catch (error) {
-    res.status(400).json({
-      error: error.message,
-    });
+    
   }
-};
+}
 export const getAllOrder = async (req, res) => {
   try {
-    const Orders = await Order.find();
+    const Orders = await Order.find().populate('userId').exec()
     res.json(Orders);
   } catch (error) {
     res.status(400).json({

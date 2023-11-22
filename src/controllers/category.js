@@ -4,7 +4,7 @@ import Product from "../models/product";
 
 const categorySchema = Joi.object({
     name: Joi.string().required(),
-    img: Joi.string().required(),   
+    img: Joi.array().required(),   
 });
 
 export const getAll = async (req, res) => {

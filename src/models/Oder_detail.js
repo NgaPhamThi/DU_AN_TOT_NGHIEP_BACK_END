@@ -7,9 +7,9 @@ const oderDetailSchema = new mongoose.Schema({
     price: {
         type: Number
     },
-    // oderId: {
-    //     type: mongoose.Types.ObjectId, ref: "Oder"
-    // },
+    orderId: {
+        type: mongoose.Types.ObjectId, ref: "Order"
+    },
     productId: {
         type: mongoose.Types.ObjectId, ref: "Product"
     },

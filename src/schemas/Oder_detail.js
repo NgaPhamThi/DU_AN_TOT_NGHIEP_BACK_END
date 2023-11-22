@@ -6,5 +6,5 @@ export const oderDetailSchema = joi.object({
     productId: joi.string().required(),
     colorId: joi.string().required(),
     sizeId: joi.string().required(),
-    // oderId: joi.string().required(),
+    orderId: joi.string().required(),
 })

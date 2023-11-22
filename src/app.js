@@ -28,5 +28,6 @@ app.use("/api", productSizeRouter);
 app.use("/api", router)
 app.use('/api',orderRouter)
 app.use('/api',searchRouter)
-mongoose.connect("mongodb://127.0.0.1:27017/DATN_WD55");
+// mongoose.connect("mongodb://127.0.0.1:27017/DATN_WD55");
+mongoose.connect("mongodb+srv://phamvanduy15012003:vanduy2003@duantotnghiep.lcazero.mongodb.net/DuAn?retryWrites=true&w=majority");
 export const viteNodeApp = app;

@@ -1,11 +1,11 @@
 import mongoose from 'mongoose'
-const orderStatus = [
-    'chờ duyệt',
-    'lấy hàng',
-    'đang giao',
-    'giao hàng thành công',
-    'Hủy đơn hàng'
-  ];
+const orderStatus = {
+    PENDING:'chờ duyệt',
+    PROCESSING:'lấy hàng',
+    ONDELIVERY:'đang giao',
+    COMPLETED:'giao hàng thành công',
+    CANCELLED:'Hủy đơn hàng'
+  };
 const ordersSchema = new mongoose.Schema({
     userId:{
         type:mongoose.Schema.Types.ObjectId,
@@ -16,11 +16,19 @@ const ordersSchema = new mongoose.Schema({
         type:Date,
         default:Date.now
     },
+    fullname:{
+        type:String,
+        required:true
+    },
+    phonenumber:{
+        type:String,
+        required:true
+    },
     status:{
         type:String,
         required:true,
-        enum: orderStatus,
-        default: 'chờ duyệt'
+        enum:Object.values(orderStatus) ,
+        default: orderStatus.PENDING
     },
     address:{
         type:String,

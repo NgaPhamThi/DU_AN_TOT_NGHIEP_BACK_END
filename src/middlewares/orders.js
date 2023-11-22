@@ -6,8 +6,8 @@ const orderStatus = [
     'Hủy đơn hàng'
   ];
   export const validateOrder =(req,res,next)=>{
-    const {userId,status,address,orderTotal} =req.body
-    if(!userId || !address ||!orderTotal){
+    const {status,address,orderTotal} =req.body
+    if( !address ||!orderTotal){
         return res.status(400).json({error:"Please provide all required fields."})
     } 
     if(status && !orderStatus.includes(status)){

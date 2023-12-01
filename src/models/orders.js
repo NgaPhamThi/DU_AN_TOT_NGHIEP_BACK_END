@@ -37,6 +37,7 @@ const ordersSchema = new mongoose.Schema({
     orderTotal:{
         type:Number,
         required:true
-    }
+    },
+    orderDetails: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OderDetail' }],
 })
 export default mongoose.model('Order',ordersSchema)

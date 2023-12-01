@@ -29,7 +29,7 @@ export const signup = async (req, res) => {
       //tạo một use mới chứa thông tin name,email từ phía client gửi lên 
       //có phần password sẽ lấy hashedpassword gắn vào 
       const user = await User.create({
-          name: req.body.name,
+          username: req.body.username,
           email: req.body.email,
           password: hashedPassword,
       });

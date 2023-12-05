@@ -4,7 +4,7 @@ import { validateOrder } from "../middlewares/orders";
 const router = express.Router();
 router.get("/order",getAllOrder)
 router.get("/purchase",purchase)
-router.get("/order/:id",getOrderDetailByOrderId)
+router.get("/order/:orderId",getOrderDetailByOrderId)
 router.get("/order/:id",getOrdersByUserId)
 router.post("/order",CreateOrder)
 router.put("/order/:id",updateOrderStatus)

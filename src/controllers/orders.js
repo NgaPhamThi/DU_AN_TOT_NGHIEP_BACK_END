@@ -30,11 +30,12 @@ export const CreateOrder = async (req, res) => {
        message: error.details.map((err) => err.message),
       });
     }
-    const { userId, fullname, phonenumber, address, orderTotal, orderDetails } = req.body;
+    const { userId, fullname, phonenumber,email, address, orderTotal, orderDetails } = req.body;
 
     const newOrder = new Order({
       userId,
       fullname,
+      email,
       phonenumber,
       address,
       orderTotal,
@@ -118,16 +119,56 @@ export const purchase = async (req, res) => {
 }
 export const getOrderDetailByOrderId = async(req, res) => {
   try {
-    
-    const orderDetails = await OderDetail.find({orderId: req.params.id}).populate('productId').exec()
-    return res.status(200).json({
-      orderDetails
-    })
+    // Extract orderId from the request parameters
+    const { orderId } = req.params;
+
+    // Fetch the order by orderId
+    const order = await Order.findById(orderId);
+
+    // If the order is not found, return a 404 response
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found.' });
+    }
+
+    // Fetch order details for the current order
+    const orderDetails = await OderDetail.find({ orderId });
+
+    // If there are no order details, return an empty array
+    if (!orderDetails || orderDetails.length === 0) {
+      return res.status(404).json({ message: 'No order details found for the specified order.' });
+    }
+
+    // Create an array to store order details with product information
+    const orderDetailsWithProductInfo = [];
+
+    // Iterate through each order detail
+    for (const detail of orderDetails) {
+      // Fetch product information for the current order detail
+      const productInfo = await Product.findById(detail.productId);
+
+      // Combine order detail and product information
+      const orderDetailWithProduct = {
+        ...detail.toJSON(),
+        productInfo: productInfo ? productInfo.toObject() : null,
+        sizeId: detail.sizeId,
+        colorId: detail.colorId,
+      };
+
+      // Add the combined information to the array
+      orderDetailsWithProductInfo.push(orderDetailWithProduct);
+    }
+
+    // Combine order and order details
+    const orderWithDetails = {
+      ...order.toJSON(),
+      orderDetails: orderDetailsWithProductInfo,
+    };
+
+    // Return the result with order and order details
+    res.status(200).json(orderWithDetails);
   } catch (error) {
-    console.error('Error ',error);
-    res.status(400).json({
-      message: 'Internal Server Error',
-    })
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 }
 export const getAllOrder = async (req, res) => {

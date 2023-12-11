@@ -9,7 +9,7 @@ export const signupSchema = joi.object({
       "string.empty": "Email không được để trống",
       "any.required": "Trường email là bắt buộc",
   }),
-  password: joi.string().required().min(6).messages({
+  password: joi.string().required().messages({
       "string.empty": "Mật khẩu không được để trống",
       "string.min": "Mật khẩu phải có ít nhất {#limit} ký tự",
       "any.require": "Trường mật khẩu là bắt buộc",

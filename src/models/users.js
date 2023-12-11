@@ -2,6 +2,9 @@ import mongoose from "mongoose";
 
 
 const UserSchema =  new mongoose.Schema({
+  idUser:{
+    type: String,
+  },
   username: {
     type: String,
     require: true,

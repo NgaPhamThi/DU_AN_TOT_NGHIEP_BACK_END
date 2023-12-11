@@ -125,6 +125,7 @@ export const getUserById = async (req, res) => {
 
 export const removeUser = async (req, res) => {
   try {
+    
       const data = await User.findByIdAndDelete(req.params.id);
       return res.status(200).json({
           message: "Người dùng đã được xóa thành công",

@@ -16,13 +16,13 @@ export const signup = async (req, res) => {
           });
       }
       // Kiểm tra xem user đã đk chưa?
-      const userExist = await User.findOne({ email: req.body.email });
-      //nếu đăng kí rồi thông báo trả ra cho client
-      if (userExist) {
-          return res.status(400).json({
-              message: "Email đã tồn tại",
-          });
-      }
+    //   const userExist = await User.findOne({ email: req.body.email });
+    //   //nếu đăng kí rồi thông báo trả ra cho client
+    //   if (userExist) {
+    //       return res.status(400).json({
+    //           message: "Email đã tồn tại",
+    //       });
+    //   }
       //nếu chưa đăng kí chúng ta mã hóa mật khẩu bằng bcrypt
       // Mã hóa mật khẩu
       const hashedPassword = await bcrypt.hash(req.body.password, 10);
@@ -101,10 +101,7 @@ export const signin = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
       const data = await User.find()
-      return res.send({
-          message: "Tìm người dùng thành công",
-          data,
-      })
+      return res.json(data);
   } catch (err) {
       return res.send({
           message: err
@@ -128,6 +125,7 @@ export const getUserById = async (req, res) => {
 
 export const removeUser = async (req, res) => {
   try {
+    
       const data = await User.findByIdAndDelete(req.params.id);
       return res.status(200).json({
           message: "Người dùng đã được xóa thành công",

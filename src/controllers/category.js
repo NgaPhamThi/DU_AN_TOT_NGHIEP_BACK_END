@@ -10,7 +10,6 @@ const categorySchema = Joi.object({
 export const getAll = async (req, res) => {
     try {
         const data = await Category.find();
-
         if (data.length == 0) {
             return res.json({
                 message: "Không có danh mục",

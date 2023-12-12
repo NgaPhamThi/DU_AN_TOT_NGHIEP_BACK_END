@@ -26,7 +26,7 @@ export const siginSchema = joi.object({
       "string.empty": "Email không được để trống",
       "any.required": "Trường email là bắt buộc",
   }),
-  password: joi.string().required().min(6).messages({
+  password: joi.string().required().messages({
       "string.empty": "Mật khẩu không được để trống",
       "any.require": "Trường mật khẩu là bắt buộc",
   }),

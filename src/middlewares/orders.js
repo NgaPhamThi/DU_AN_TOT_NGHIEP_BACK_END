@@ -1,10 +1,10 @@
-const orderStatus = [
-    'chờ duyệt',
-    'lấy hàng',
-    'đang giao',
-    'giao hàng thành công',
-    'Hủy đơn hàng'
-  ];
+const orderStatus = {
+  PENDING:'chờ duyệt',
+  PROCESSING:'lấy hàng',
+  ONDELIVERY:'đang giao',
+  COMPLETED:'giao hàng thành công',
+  CANCELLED:'Hủy đơn hàng'
+};
   export const validateOrder =(req,res,next)=>{
     const {status,address,orderTotal} =req.body
     if( !address ||!orderTotal){

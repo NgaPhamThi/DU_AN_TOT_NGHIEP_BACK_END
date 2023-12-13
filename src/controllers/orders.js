@@ -202,7 +202,7 @@ export const updateOrderStatus = async (req, res) => {
         error: "Order khong ton tai",
       });
     }
-    if (updateOrdersStatus.status === "chờ duyệt") {
+    if (updateOrdersStatus.status === "PENDING" || updateOrdersStatus.status === "PROCESSING" || updateOrdersStatus.status === "ONDELIVERY") {
       const updateStatus = await Order.findByIdAndUpdate(
         req.params.id,
         { status: req.body.status },

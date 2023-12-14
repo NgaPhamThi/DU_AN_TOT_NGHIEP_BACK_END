@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 const orderStatus = {
-    PENDING:'chờ duyệt',
+    PENDING:'PENDING',
     PROCESSING:'lấy hàng',
     ONDELIVERY:'đang giao',
     COMPLETED:'giao hàng thành công',

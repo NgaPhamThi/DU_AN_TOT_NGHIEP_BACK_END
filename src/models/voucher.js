@@ -17,7 +17,6 @@ const voucherSchema = new mongoose.Schema({
   },
   IsActive: {
     type: Boolean,
-    required: true,
   },
   Description: {
     type: String,

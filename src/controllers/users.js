@@ -110,17 +110,15 @@ export const getUser = async (req, res) => {
 }
 
 export const getUserById = async (req, res) => {
+  try{
   const id = req.params.id
   const data = await User.findById(id)
-  if (data) {
-      res.send({
-          message: "Tìm người dùng thành công",
-          data,
-      })
-  } else {
-      res.status(404).send("Không tìm thấy người dùng")
-  }
-  res.end()
+  return res.json(data);
+  } catch(err){
+    return res.send({
+      message: err
+  })
+}
 }
 
 export const removeUser = async (req, res) => {

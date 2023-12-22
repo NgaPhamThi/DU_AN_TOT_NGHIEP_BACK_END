@@ -15,6 +15,7 @@ import router from "./routers/users";
 import orderRouter from "./routers/orders";
 import searchRouter from "./routers/search";
 import contactRouter from "./routers/contact";
+import vnpayRouter from "./routers/vnpay";
 const app = express();
 app.use(express.json());
 app.use(cors());
@@ -32,6 +33,8 @@ app.use("/api", router);
 app.use("/api", orderRouter);
 app.use("/api", searchRouter);
 app.use("/api", contactRouter);
+app.use("/api", vnpayRouter);
+
 
 // mongoose.connect("mongodb://127.0.0.1:27017/DATN_WD55");
 mongoose.connect(

@@ -65,7 +65,8 @@ export const CreateOrder = async (req, res) => {
 export const purchase = async (req, res) => {
   try {
     // Fetch all orders from the database
-    const orders = await Order.find();
+    const userId = req.params.userId || req.headers['user-id'];
+    const orders = await Order.find({ userId });
 
     // If there are no orders, return an empty array
     if (!orders || orders.length === 0) {
@@ -183,7 +184,7 @@ export const getAllOrder = async (req, res) => {
 };
 export const getOrdersByUserId = async (req, res) => {
   try {
-    const Oders = await Order.find({ userId: req.params.id });
+    const Oders = await Order.findById({ userId: req.params.id });
     return res.status(200).json({
       Oders,
     });

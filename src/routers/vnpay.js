@@ -1,8 +1,8 @@
-import express from 'express'
-import { Vnpay } from '../controllers/vnpay'
+// import express from 'express'
+// import { Vnpay } from '../controllers/vnpay'
 
-const router = express.Router()
+// const router = express.Router()
 
-router.post('/createVnpay',Vnpay)
+// router.post('/createVnpay',Vnpay)
 
-export default router
+// export default router

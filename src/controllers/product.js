@@ -31,17 +31,8 @@ export const getAll = async (req, res) => {
 export const get = async (req, res) => {
     try {
         const id = req.params.id;
-        const data = await Product.findOne({ _id: id }).populate({
-            path: "categoryId",
-            select: "-__v",
-        });
-        
-        if (!data) {
-            return res.status(400).json({
-                message: "Không có sản phẩm",
-            });
-        }
-        return res.status(200).json(data);
+        const data = await Product.findById(id)
+        return res.json(data);
     } catch (error) {
         return res.status(400).json({
             message: error.message

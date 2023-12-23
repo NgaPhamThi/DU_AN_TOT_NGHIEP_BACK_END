@@ -33,7 +33,7 @@ app.use("/api", router);
 app.use("/api", orderRouter);
 app.use("/api", searchRouter);
 app.use("/api", contactRouter);
-app.use("/api", vnpayRouter);
+// app.use("/api", vnpayRouter);
 
 
 // mongoose.connect("mongodb://127.0.0.1:27017/DATN_WD55");

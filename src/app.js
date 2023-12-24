@@ -15,6 +15,7 @@ import router from "./routers/users";
 import orderRouter from "./routers/orders";
 import searchRouter from "./routers/search";
 import contactRouter from "./routers/contact";
+import blogRouter from "./routers/blog";
 import vnpayRouter from "./routers/vnpay";
 const app = express();
 app.use(express.json());
@@ -33,6 +34,7 @@ app.use("/api", router);
 app.use("/api", orderRouter);
 app.use("/api", searchRouter);
 app.use("/api", contactRouter);
+app.use("/api",blogRouter);
 // app.use("/api", vnpayRouter);
 
 

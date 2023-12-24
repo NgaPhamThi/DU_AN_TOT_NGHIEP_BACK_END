@@ -65,7 +65,7 @@ export const CreateOrder = async (req, res) => {
 export const purchase = async (req, res) => {
   try {
     // Fetch all orders from the database
-    const userId = req.params.userId || req.headers['user-id'];
+    const userId = req.params.userId 
     const orders = await Order.find({ userId });
 
     // If there are no orders, return an empty array

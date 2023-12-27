@@ -1,4 +1,4 @@
-import jwt, { verify } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import User from '../models/users'
 
 export const checkPermission = async (req, res, next) => {

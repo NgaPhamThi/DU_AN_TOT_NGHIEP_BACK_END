@@ -14,7 +14,10 @@ const contactSchema = new mongoose.Schema({
     description: {
         type: String
     },
-
+    status: {
+        type: String,
+        default: "Not approved yet",
+    }
 
 }, { timestamps: true, versionKey: false })
 export default mongoose.model("Contact", contactSchema)

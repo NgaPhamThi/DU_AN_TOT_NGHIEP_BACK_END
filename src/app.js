@@ -1,3 +1,4 @@
+import analyticRouter from './routers/analytic.routes';
 import blogRouter from './routers/blog';
 import cartRouter from './routers/cart';
 import categoryRouter from './routers/category';
@@ -37,9 +38,10 @@ app.use('/api', searchRouter);
 app.use('/api', contactRouter);
 app.use('/api', blogRouter);
 app.use('/api', vnpayRouter);
+app.use('/api', analyticRouter);
 
 // mongoose.connect("mongodb://127.0.0.1:27017/DATN_WD55");
 mongoose.connect(
-	'mongodb+srv://phamvanduy15012003:vanduy2003@duantotnghiep.lcazero.mongodb.net/DuAn?retryWrites=true&w=majority'
+	'mongodb+srv://phamvanduy15012003:vanduy2003@duantotnghiep.lcazero.mongodb.net/DuAn?retryWrites=true&w=majority',
 );
 export const viteNodeApp = app;

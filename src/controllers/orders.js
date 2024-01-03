@@ -59,7 +59,7 @@ export const CreateOrder = async (req, res) => {
     
     res.status(201).json(newOrder);
   } catch (error) {
-    
+    res.status(500).json({ message: "Internal Server Error" });
   }
 }
 export const purchase = async (req, res) => {

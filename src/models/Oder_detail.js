@@ -19,6 +19,9 @@ const oderDetailSchema = new mongoose.Schema({
     colorId: {
         type: mongoose.Types.ObjectId, ref: "Color"
     },
+    voucherId: {
+        type: mongoose.Types.ObjectId, ref: "Voucher"
+    },
 
 }, { timestamps: true, versionKey: false })
 export default mongoose.model("OderDetail", oderDetailSchema)

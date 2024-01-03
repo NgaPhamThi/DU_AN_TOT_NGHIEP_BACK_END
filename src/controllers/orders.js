@@ -49,7 +49,8 @@ export const CreateOrder = async (req, res) => {
         quantity: detail.quantity,
         price: detail.price,
         sizeId: detail.sizeId,
-        colorId: detail.colorId
+        colorId: detail.colorId,
+        voucherId: detail.voucherId
       });
       await orderDetail.save();
       
@@ -59,7 +60,8 @@ export const CreateOrder = async (req, res) => {
     
     res.status(201).json(newOrder);
   } catch (error) {
-    
+    console.error("Error creating order:", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 }
 export const purchase = async (req, res) => {
@@ -94,7 +96,8 @@ export const purchase = async (req, res) => {
           ...detail.toJSON(),
           productInfo: productInfo ? productInfo.toObject() : null,
           sizeId:detail.sizeId,
-          colorId:detail.colorId
+          colorId:detail.colorId,
+          voucherId:detail.voucherId
         };
 
         // Add the combined information to the array

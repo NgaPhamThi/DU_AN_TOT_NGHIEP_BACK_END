@@ -11,6 +11,13 @@ const voucherSchema = new mongoose.Schema({
     required: true,
     maxlength: 255,
   },
+  Quantity: {
+    type: Number,
+  },
+  Start_Date: {
+    type: Date,
+    required: true,
+  },
   Expiration_Date: {
     type: Date,
     required: true,

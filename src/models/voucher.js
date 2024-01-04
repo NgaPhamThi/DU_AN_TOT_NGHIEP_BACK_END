@@ -7,7 +7,7 @@ const voucherSchema = new mongoose.Schema({
     maxlength: 255,
   },
   Discount_Type: {
-    type: String,
+    type: Number,
     required: true,
     maxlength: 255,
   },

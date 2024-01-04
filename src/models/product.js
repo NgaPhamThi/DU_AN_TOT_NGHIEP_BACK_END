@@ -8,7 +8,10 @@ const productSchema = mongoose.Schema({
     },
     price: Number,
     price_sale: Number,
-    img: String,
+    img: [{
+        type: String,
+        required: true,
+    }],
     description: String,
     categoryId: {
         type: mongoose.Types.ObjectId,

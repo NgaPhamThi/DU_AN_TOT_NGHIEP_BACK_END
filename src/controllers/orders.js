@@ -2,6 +2,7 @@ import OderDetail from "../models/Oder_detail";
 import Order from "../models/orders";
 import Product from "../models/product"
 import { OrdersSchema } from "../schemas/orders";
+import Voucher from "../models/voucher";
 
 // export const createOrder = async (req, res) => {
 //   try {
@@ -53,7 +54,14 @@ export const CreateOrder = async (req, res) => {
         colorId: detail.colorId
       });
       await orderDetail.save();
-      
+     const voucher = await Voucher.findById(detail.voucherId)
+     if(voucher && voucher.Quantity >0){
+      voucher.Quantity -= 1;
+      await voucher.save();
+     }else {
+      // Handle case where voucher is not found or quantity is 0
+      console.error('Voucher not found or out of stock:', voucher);
+    }
     }));
     
 
@@ -63,6 +71,7 @@ export const CreateOrder = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+
 export const purchase = async (req, res) => {
   try {
     // Fetch all orders from the database

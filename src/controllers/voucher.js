@@ -25,6 +25,26 @@ export const createVoucher = async (req, res) => {
     });
   }
 };
+export const updateQuantity = async (req, res) => {
+  try {
+    const voucherId = req.params.id
+    const updateQuantity = req.body.quantity
+    const updatedVoucher = await Voucher.findOneAndUpdate(
+      { id: voucherId },
+      { $set: { Quantity: updateQuantity } },
+      { new: true }
+    );
+
+    if (updatedVoucher) {
+      res.status(200).json({ message: 'Voucher quantity updated successfully' });
+    } else {
+      res.status(404).json({ message: 'Voucher not found' });
+    }
+  } catch (error) {
+    console.error('Error updating voucher quantity:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
 // Get Voucher
 export const getVouchers = async (req, res) => {
   try {

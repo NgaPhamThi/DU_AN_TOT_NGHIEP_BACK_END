@@ -49,6 +49,7 @@ export const CreateOrder = async (req, res) => {
         quantity: detail.quantity,
         price: detail.price,
         sizeId: detail.sizeId,
+        voucherId: detail.voucherId,
         colorId: detail.colorId
       });
       await orderDetail.save();

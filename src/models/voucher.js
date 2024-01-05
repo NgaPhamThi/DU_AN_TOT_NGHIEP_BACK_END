@@ -4,12 +4,10 @@ const voucherSchema = new mongoose.Schema({
   Voucher_Code: {
     type: String,
     required: true,
-    maxlength: 255,
   },
   Discount_Type: {
     type: Number,
     required: true,
-    maxlength: 255,
   },
   Quantity: {
     type: Number,

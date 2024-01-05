@@ -1,5 +1,5 @@
 import Voucher from "../models/voucher";
-import voucherSchema from "../schemas/vouchers";
+import { voucherSchema } from "../schemas/vouchers";
 
 // Create Voucher
 export const createVoucher = async (req, res) => {

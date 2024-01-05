@@ -7,7 +7,6 @@ const productSchema = mongoose.Schema({
         require: true,
     },
     price: Number,
-    price_sale: Number,
     img: [{
         type: String,
         required: true,

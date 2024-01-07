@@ -32,6 +32,7 @@ export const signup = async (req, res) => {
           username: req.body.username,
           email: req.body.email,
           password: hashedPassword,
+          avatar: "https://res.cloudinary.com/dfftwrlu2/image/upload/v1700585307/IMG_0773_tesnhz.jpg",
       });
 
       // Tạo token
@@ -76,7 +77,7 @@ export const signin = async (req, res) => {
           })
       }
 
-      const token = jwt.sign({ id: user._id }, "123456", { expiresIn: "1d" })
+      const token = jwt.sign({ id: user._id,username:user.username,email:user.email }, "123456", { expiresIn: "1d" })
 
       user.password = undefined
       return res.status(200).json({

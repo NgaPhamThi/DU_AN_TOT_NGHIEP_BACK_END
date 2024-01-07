@@ -71,7 +71,48 @@ export const CreateOrder = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 }
+export const CreateOrderNoUserId = async (req, res) => {
+  try {
+   
+    const { fullname, phonenumber,email, address, orderTotal, orderDetails } = req.body;
 
+    const newOrder = new Order({
+      fullname,
+      email,
+      phonenumber,
+      address,
+      orderTotal,
+    });
+    await newOrder.save();
+    const orderDetailsWithProductInfo = [];
+    await Promise.all(orderDetails.map(async (detail) => {
+      const orderDetail = new OderDetail({
+        orderId: newOrder._id,
+        productId: detail.productId,
+        quantity: detail.quantity,
+        price: detail.price,
+        sizeId: detail.sizeId,
+        voucherId: detail.voucherId,
+        colorId: detail.colorId
+      });
+      await orderDetail.save();
+     const voucher = await Voucher.findById(detail.voucherId)
+     if(voucher && voucher.Quantity >0){
+      voucher.Quantity -= 1;
+      await voucher.save();
+     }else {
+      // Handle case where voucher is not found or quantity is 0
+      console.error('Voucher not found or out of stock:', voucher);
+    }
+    }));
+    
+
+    
+    res.status(201).json(newOrder);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
 export const purchase = async (req, res) => {
   try {
     // Fetch all orders from the database

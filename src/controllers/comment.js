@@ -25,7 +25,10 @@ export const createComment = async (req, res) => {
 }
 export const getCommentsByProductId = async (req, res) => {
     try {
-        const comments = await comment.find({ productId: req.params.id }).populate('userId', 'username').exec()
+        const comments = await comment.find({ productId: req.params.id }).populate({
+            path: 'userId',
+            select: 'username avatar',
+        }).exec()
         return res.status(200).json({
             comments,
 

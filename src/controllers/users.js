@@ -33,6 +33,8 @@ export const signup = async (req, res) => {
           email: req.body.email,
           password: hashedPassword,
           avatar: "https://res.cloudinary.com/dfftwrlu2/image/upload/v1700585307/IMG_0773_tesnhz.jpg",
+          status: "on going"
+
       });
 
       // Tạo token

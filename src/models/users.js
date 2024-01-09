@@ -23,6 +23,10 @@ const UserSchema =  new mongoose.Schema({
     type: String,
     default: "member",
   },
+  status: {
+    type: String,
+    default: "on going",
+  },
   avatar: {
     type: String,
     default: "https://res.cloudinary.com/dfftwrlu2/image/upload/v1700585307/IMG_0773_tesnhz.jpg", // Đặt đường dẫn đến ảnh mặc định của bạn

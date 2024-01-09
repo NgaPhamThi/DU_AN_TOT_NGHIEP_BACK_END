@@ -54,6 +54,13 @@ export const CreateOrder = async (req, res) => {
         colorId: detail.colorId
       });
       await orderDetail.save();
+      const product = await Product.findById(detail.productId)
+      if(product && product.quantity >= detail.quantity){
+        product.quantity -= detail.quantity;
+        await product.save();
+      }else{
+        console.error('Product not found or insufficient quantity:', product);
+      }
      const voucher = await Voucher.findById(detail.voucherId)
      if(voucher && voucher.Quantity >0){
       voucher.Quantity -= 1;

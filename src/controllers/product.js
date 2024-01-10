@@ -5,9 +5,10 @@ const productSchema = Joi.object({
     name: Joi.string().required(),
     price: Joi.number().required(),
     img : Joi.array().required(),
-    quantity: Joi.number().required(),
+    totalQuantity: Joi.number().required(),
     description: Joi.string().required(),
     categoryId : Joi.string().required(),
+    sizes: Joi.array().required(),
 });
 
 export const getAll = async (req, res) => {
@@ -42,6 +43,7 @@ export const get = async (req, res) => {
 export const create = async (req, res) => {
     try {
         const body = req.body;
+        console.log(body,"12312");
         const { error } = productSchema.validate(body);
         if (error) {
             return res.json({

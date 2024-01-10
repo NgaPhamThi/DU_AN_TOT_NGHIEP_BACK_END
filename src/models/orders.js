@@ -42,6 +42,15 @@ const ordersSchema = new mongoose.Schema({
 		type: Number,
 		required: true,
 	},
-	orderDetails: [{ type: mongoose.Schema.Types.ObjectId, ref: 'OderDetail' }],
+	orderDetails: [
+		{
+			productId: { type: mongoose.Schema.Types.ObjectId, required: true },
+			quantity: { type: Number, required: true },
+			price: { type: Number, required: true },
+			sizeId: { type: mongoose.Schema.Types.ObjectId },
+			voucherId: { type: mongoose.Schema.Types.ObjectId },
+			colorId: { type: mongoose.Schema.Types.ObjectId },
+		}
+	],
 });
 export default mongoose.model('Order', ordersSchema);

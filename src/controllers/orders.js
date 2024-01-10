@@ -32,7 +32,6 @@ export const CreateOrder = async (req, res) => {
       });
     }
     const { userId, fullname, phonenumber,email, address, orderTotal, orderDetails } = req.body;
-
     const newOrder = new Order({
       userId,
       fullname,
@@ -40,9 +39,9 @@ export const CreateOrder = async (req, res) => {
       phonenumber,
       address,
       orderTotal,
+      orderDetails: req.body.orderDetails,
     });
     await newOrder.save();
-    const orderDetailsWithProductInfo = [];
     await Promise.all(orderDetails.map(async (detail) => {
       const orderDetail = new OderDetail({
         orderId: newOrder._id,

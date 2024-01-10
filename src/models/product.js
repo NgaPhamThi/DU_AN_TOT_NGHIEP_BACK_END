@@ -12,17 +12,30 @@ const productSchema = mongoose.Schema({
         type: String,
         required: true,
     }],
-    quantity:{
-        type:Number,
-        required: true,
-    },
+    sizeAndcolor: [
+        {
+            sizeId: {
+                type: mongoose.Types.ObjectId,
+                ref: "Size",
+            },
+            colorId: {
+                type: mongoose.Types.ObjectId,
+                ref: "Color",
+            },
+            quantity: {
+                type: Number,
+                required: true,
+            }
+        }
+
+    ],
     description: String,
     categoryId: {
         type: mongoose.Types.ObjectId,
         ref: "Category",
     }
 },
-{ timestamps: true, versionKey: false }
+    { timestamps: true, versionKey: false }
 );
 
 productSchema.plugin(mongoosePaginate)

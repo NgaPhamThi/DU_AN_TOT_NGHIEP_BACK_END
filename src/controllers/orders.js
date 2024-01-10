@@ -40,9 +40,9 @@ export const CreateOrder = async (req, res) => {
       phonenumber,
       address,
       orderTotal,
+      orderDetails: req.body.orderDetails,
     });
     await newOrder.save();
-    const orderDetailsWithProductInfo = [];
     await Promise.all(orderDetails.map(async (detail) => {
       const orderDetail = new OderDetail({
         orderId: newOrder._id,
@@ -89,6 +89,7 @@ export const CreateOrderNoUserId = async (req, res) => {
       phonenumber,
       address,
       orderTotal,
+      orderDetails: req.body.orderDetails,
     });
     await newOrder.save();
     const orderDetailsWithProductInfo = [];

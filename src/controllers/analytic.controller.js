@@ -1,5 +1,9 @@
 import Order, { orderStatus } from '../models/orders';
 
+import User from '../models/users';
+import Voucher from '../models/voucher';
+import product from '../models/product';
+
 export const analyticController = {
 	/* filter money */
 	filterMoney: async (req, res) => {
@@ -446,6 +450,56 @@ export const analyticController = {
 			const resultYear = await analyticController.getOrderStatus(startOfYear, endOfYear, orderStatus.CANCELLED);
 
 			return res.status(200).json({ day: resultDay, week: resultWeek, month: resultMonth, year: resultYear });
+		} catch (error) {
+			return res.status(500).json({ error });
+		}
+	},
+
+	/* thống kê số lượng các loại */
+	counts: async (_, res) => {
+		try {
+			const productCount = await product.countDocuments();
+			const userCount = await User.countDocuments();
+			const voucherCount = await Voucher.countDocuments();
+
+			/* map array */
+			const counts = [
+				{ title: 'Sản phẩm', value: productCount },
+				{ title: 'Người dùng', value: userCount },
+				{ title: 'Voucher', value: voucherCount },
+			];
+
+			return res.status(200).json(counts);
+		} catch (error) {
+			return res.status(500).json({ error });
+		}
+	},
+
+	/* thống kê số lượng sản phẩm trong kho */
+	countProducts: async (_, res) => {
+		try {
+			const productCount = await product.countDocuments();
+			return res.status(200).json({ productCount });
+		} catch (error) {
+			return res.status(500).json({ error });
+		}
+	},
+
+	/* thống kê số lượng người dùng */
+	countUsers: async (_, res) => {
+		try {
+			const userCount = await User.countDocuments();
+			return res.status(200).json({ userCount });
+		} catch (error) {
+			return res.status(500).json({ error });
+		}
+	},
+
+	/* thống kê số lượng voucher */
+	countVouchers: async (_, res) => {
+		try {
+			const voucherCount = await Voucher.countDocuments();
+			return res.status(200).json({ voucherCount });
 		} catch (error) {
 			return res.status(500).json({ error });
 		}

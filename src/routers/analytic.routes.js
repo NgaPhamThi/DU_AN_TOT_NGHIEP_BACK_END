@@ -17,4 +17,8 @@ router.get('/analytic-order-delivery', analyticController.getOrderStatusDelivery
 router.get('/analytic-order-complete', analyticController.getOrderStatusComplete);
 router.get('/analytic-order-cancelled', analyticController.getOrderStatusCancelled);
 
+router.get('/analytic-products', analyticController.countProducts);
+router.get('/analytic-users', analyticController.countUsers);
+router.get('/analytic-numbes', analyticController.counts);
+
 export default router;

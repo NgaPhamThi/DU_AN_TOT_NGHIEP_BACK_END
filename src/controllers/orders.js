@@ -28,10 +28,10 @@ export const CreateOrder = async (req, res) => {
     const { error } = OrdersSchema.validate(req.body, { abortEarly: false });
     if (error) {
       return res.status(400).json({
-       message: error.details.map((err) => err.message),
+        message: error.details.map((err) => err.message),
       });
     }
-    const { userId, fullname, phonenumber,email, address, orderTotal, orderDetails } = req.body;
+    const { userId, fullname, phonenumber, email, address, orderTotal, orderDetails } = req.body;
 
     const newOrder = new Order({
       userId,
@@ -54,25 +54,29 @@ export const CreateOrder = async (req, res) => {
         colorId: detail.colorId
       });
       await orderDetail.save();
-      const product = await Product.findById(detail.productId)
-      if(product && product.quantity >= detail.quantity){
-        product.quantity -= detail.quantity;
+      const product = await Product.findById(detail.productId);
+      const sizeAndColor = product.sizeAndcolor.find(entry =>
+        entry.sizeId.equals(detail.sizeId) && entry.colorId.equals(detail.colorId)
+      );
+      if (sizeAndColor && sizeAndColor.quantity >= detail.quantity) {
+        sizeAndColor.quantity -= detail.quantity;
         await product.save();
-      }else{
-        console.error('Product not found or insufficient quantity:', product);
+        const voucher = await Voucher.findById(detail.voucherId)
+        if (voucher && voucher.Quantity > 0) {
+          voucher.Quantity -= 1;
+          await voucher.save();
+        } else {
+          // Handle case where voucher is not found or quantity is 0
+          console.error('Voucher not found or out of stock:', voucher);
+        }
+      } else {
+        console.error('Invalid sizeId, colorId, or insufficient quantity for product:', product);
       }
-     const voucher = await Voucher.findById(detail.voucherId)
-     if(voucher && voucher.Quantity >0){
-      voucher.Quantity -= 1;
-      await voucher.save();
-     }else {
-      // Handle case where voucher is not found or quantity is 0
-      console.error('Voucher not found or out of stock:', voucher);
-    }
-    }));
-    
 
-    
+    }));
+
+
+
     res.status(201).json(newOrder);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
@@ -80,8 +84,8 @@ export const CreateOrder = async (req, res) => {
 }
 export const CreateOrderNoUserId = async (req, res) => {
   try {
-   
-    const { fullname, phonenumber,email, address, orderTotal, orderDetails } = req.body;
+
+    const { fullname, phonenumber, email, address, orderTotal, orderDetails } = req.body;
 
     const newOrder = new Order({
       fullname,
@@ -104,18 +108,18 @@ export const CreateOrderNoUserId = async (req, res) => {
         colorId: detail.colorId
       });
       await orderDetail.save();
-     const voucher = await Voucher.findById(detail.voucherId)
-     if(voucher && voucher.Quantity >0){
-      voucher.Quantity -= 1;
-      await voucher.save();
-     }else {
-      // Handle case where voucher is not found or quantity is 0
-      console.error('Voucher not found or out of stock:', voucher);
-    }
+      const voucher = await Voucher.findById(detail.voucherId)
+      if (voucher && voucher.Quantity > 0) {
+        voucher.Quantity -= 1;
+        await voucher.save();
+      } else {
+        // Handle case where voucher is not found or quantity is 0
+        console.error('Voucher not found or out of stock:', voucher);
+      }
     }));
-    
 
-    
+
+
     res.status(201).json(newOrder);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
@@ -124,7 +128,7 @@ export const CreateOrderNoUserId = async (req, res) => {
 export const purchase = async (req, res) => {
   try {
     // Fetch all orders from the database
-    const userId = req.params.userId 
+    const userId = req.params.userId
     const orders = await Order.find({ userId });
 
     // If there are no orders, return an empty array
@@ -152,8 +156,8 @@ export const purchase = async (req, res) => {
         const orderDetailWithProduct = {
           ...detail.toJSON(),
           productInfo: productInfo ? productInfo.toObject() : null,
-          sizeId:detail.sizeId,
-          colorId:detail.colorId
+          sizeId: detail.sizeId,
+          colorId: detail.colorId
         };
 
         // Add the combined information to the array
@@ -177,7 +181,7 @@ export const purchase = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
-export const getOrderDetailByOrderId = async(req, res) => {
+export const getOrderDetailByOrderId = async (req, res) => {
   try {
     // Extract orderId from the request parameters
     const { orderId } = req.params;
@@ -270,10 +274,10 @@ export const updateOrderStatus = async (req, res) => {
       );
 
       res.json(updateStatus);
-    }else{
-        return res.status(400).json({
-            error: "Không thể hủy đơn hàng ở trạng thái này"
-        });
+    } else {
+      return res.status(400).json({
+        error: "Không thể hủy đơn hàng ở trạng thái này"
+      });
     }
   } catch (error) {
     res.status(500).json({

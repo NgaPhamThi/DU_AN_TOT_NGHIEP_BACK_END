@@ -8,7 +8,6 @@ const productSchema = Joi.object({
     sizeAndcolor: Joi.array().required(),
     description: Joi.string().required(),
     categoryId : Joi.string().required(),
-    sizes: Joi.array().required(),
 });
 
 export const getAll = async (req, res) => {

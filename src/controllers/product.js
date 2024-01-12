@@ -80,6 +80,10 @@ export const remove = async (req, res) => {
 };
 export const update = async (req, res) => {
     try {
+        const { sizeAndcolor, ...updateData } = req.body;
+        if (sizeAndcolor) {
+            updateData.sizeAndcolor = sizeAndcolor;
+        }
         const data = await Product.findOneAndUpdate({ _id: req.params.id }, req.body, {
             new: true,
         });

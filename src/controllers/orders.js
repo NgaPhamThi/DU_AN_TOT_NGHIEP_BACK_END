@@ -99,7 +99,6 @@ export const CreateOrderNoUserId = async (req, res) => {
       orderDetails: req.body.orderDetails,
     });
     await newOrder.save();
-    const orderDetailsWithProductInfo = [];
     await Promise.all(orderDetails.map(async (detail) => {
       const orderDetail = new OderDetail({
         orderId: newOrder._id,
@@ -111,13 +110,23 @@ export const CreateOrderNoUserId = async (req, res) => {
         colorId: detail.colorId
       });
       await orderDetail.save();
-      const voucher = await Voucher.findById(detail.voucherId)
-      if (voucher && voucher.Quantity > 0) {
-        voucher.Quantity -= 1;
-        await voucher.save();
+      const product = await Product.findById(detail.productId);
+      const sizeAndColor = product.sizeAndcolor.find(entry =>
+        entry.sizeId.equals(detail.sizeId) && entry.colorId.equals(detail.colorId)
+      );
+      if (sizeAndColor && sizeAndColor.quantity >= detail.quantity) {
+        sizeAndColor.quantity -= detail.quantity;
+        await product.save();
+        const voucher = await Voucher.findById(detail.voucherId)
+        if (voucher && voucher.Quantity > 0) {
+          voucher.Quantity -= 1;
+          await voucher.save();
+        } else {
+          // Handle case where voucher is not found or quantity is 0
+          console.error('Voucher not found or out of stock:', voucher);
+        }
       } else {
-        // Handle case where voucher is not found or quantity is 0
-        console.error('Voucher not found or out of stock:', voucher);
+        console.error('Invalid sizeId, colorId, or insufficient quantity for product:', product);
       }
     }));
 
@@ -264,6 +273,8 @@ export const getOrdersByUserId = async (req, res) => {
 export const updateOrderStatus = async (req, res) => {
   try {
     const updateOrdersStatus = await Order.findById(req.params.id);
+    const newStatus = req.body.status;
+
     if (!updateOrdersStatus) {
       return res.status(400).json({
         error: "Order khong ton tai",
@@ -275,6 +286,27 @@ export const updateOrderStatus = async (req, res) => {
       updateOrdersStatus.status === 'COMPLETED' ||
 			updateOrdersStatus.status === 'CANCELLED'
     ) {
+      if(newStatus === 'CANCELLED' && updateOrdersStatus.status !=='CANCELLED'){
+        await Promise.all(updateOrdersStatus.orderDetails.map(async (detail)=>{
+          const product = await Product.findById(detail.productId)
+          const sizeAndColor = product.sizeAndcolor.find(entry=>
+            entry.sizeId.equals(detail.sizeId) && entry.colorId.equals(detail.colorId)
+            );
+            if(sizeAndColor){
+              sizeAndColor.quantity += detail.quantity
+              await product.save()
+              const voucher = await Voucher.findById(detail.voucherId)
+              if(voucher){
+                voucher.Quantity += 1;
+                await voucher.save()
+              }else{
+                console.error('Voucher not found:', voucher);
+              }
+            }else{
+              console.error('Invalid sizeId, colorId, or product not found:', product);
+            }
+        }))
+      }
       const updateStatus = await Order.findByIdAndUpdate(
         req.params.id,
         { status: req.body.status },

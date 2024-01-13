@@ -1,23 +1,38 @@
 
-import mongoose from "mongoose"
-
+import mongoose from "mongoose";
+export const ContactStatus = {
+	CHUATUVAN: 'CHUATUVAN',
+	DATUVAN: 'DATUVAN',
+};
 const contactSchema = new mongoose.Schema({
+    userId: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User',
+	},
     name: {
-        type: String
+        type: String,
+		required: true,
     },
     email: {
-        type: String
+        type: String,
+		required: true,
     },
     phonenumber: {
-        type: String
+        type: String,
+		required: true,
+
     },
     description: {
-        type: String
+        type: String,
+        required: true,
+    },
+    traloi:{
+        type: String,
     },
     status: {
         type: String,
-        default: "Not approved yet",
+        default:ContactStatus.CHUATUVAN,
     }
 
-}, { timestamps: true, versionKey: false })
-export default mongoose.model("Contact", contactSchema)
+});
+export default mongoose.model('Contact', contactSchema)

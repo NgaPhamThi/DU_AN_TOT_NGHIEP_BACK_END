@@ -1,6 +1,7 @@
 import Contact from "../models/contact"
 import { contactSchema } from "../schemas/contact";
-
+import nodemailer from 'nodemailer';
+import { sendMail1 } from './nodemailer.controller';
 export const getAll = async (req, res) => {
     try {
         const contact = await Contact.find();
@@ -24,7 +25,7 @@ export const get = async (req, res) => {
 
     }
 }
-export const create = async (req, res) => {
+export const createContact = async (req, res) => {
     try {
         const { error } = contactSchema.validate(req.body, { abortEarly: false });
         if (error) {
@@ -32,14 +33,36 @@ export const create = async (req, res) => {
                 message: error.details.map(err => err.message)
             })
         }
-        const contact = await Contact.create(req.body);
-        return res.status(201).json(contact)
-    } catch (error) {
-        return res.status(400).json({
-            message: error.message,
-        })
+        const { userId, name, phonenumber, email, description } = req.body;
+        const newContact = new Contact({
+            userId, 
+            name,
+            phonenumber,
+            email, 
+            description});
+              await newContact.save();
+    await sendMail1(newContact);
 
-    }
+             res.status(201).json(newContact);
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" });
+      }
+}
+export const createContactNoUserId = async (req, res) => {
+    try {
+        const { name, phonenumber, email, description } = req.body;
+        const newContact = new Contact({
+            name,
+            phonenumber,
+            email, 
+            description});
+              await newContact.save();
+    await sendMail1(newContact);
+
+             res.status(201).json(newContact);
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" });
+      }
 }
 export const remove = async (req, res) => {
     try {
@@ -55,16 +78,36 @@ export const remove = async (req, res) => {
 
     }
 }
-export const update = async (req, res) => {
+export const updateContactStatus = async (req, res) => {
     try {
-        const contact = await Contact.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        return res.json({
-            contact,
-        })
-    } catch (error) {
+      const updateContact = await Contact.findById(req.params.id);
+      if (!updateContact) {
         return res.status(400).json({
-            message: error.message,
-        })
+          error: "Liên hệ không tồn tại",
+        });
+      }
+      if (
+        updateContact.status === "CHUATUVAN" ||
+        updateContact.status === "DATUVAN" 
+      ) {
+        const updatedContact = await Contact.findByIdAndUpdate(
+          req.params.id,
+          req.body,
+          { status: req.body.status },
+          { new: true }
+        );
+      await sendMail1(updatedContact);
 
+        res.json(updatedContact);
+      } else {
+        return res.status(400).json({
+          error: "Không thể cập nhật liên hệ ở trạng thái này",
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        error: error.message,
+      });
     }
-}
+  };
+  

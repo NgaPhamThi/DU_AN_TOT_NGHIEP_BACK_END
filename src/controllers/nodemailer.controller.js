@@ -36,3 +36,50 @@ export const sendMail = async (data) => {
 
 	await transporter.sendMail(mainOptions);
 };
+export const sendMail1 = async (data) => {
+	const transporter = nodemailer.createTransport({
+		// config mail server
+		service: 'Gmail',
+		auth: {
+			user: 'quangpn1254@gmail.com',
+			pass: 'kvqhpmnuubestlbv',
+		},
+		tls: {
+			rejectUnauthorized: false,
+		},
+	});
+	const mainOptions = {
+		from: data.fullname,
+		to: data.email,
+		subject: 'Cảm ơn bạn đã liên hệ',
+		text: 'Hi!',
+		html: `
+		  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+			<h2 style="color: #333; text-align: center;">Bạn có một tin nhắn mới</h2>
+			<ul style="list-style-type: none; padding: 0;">
+			  <li>
+				<strong>Tên:</strong> ${data.name}
+			  </li>
+			  <li>
+				<strong>Email:</strong> ${data.email}
+			  </li>
+			  <li>
+				<strong>Số điện thoại:</strong> ${data.phonenumber}
+			  </li>
+			  <li>
+				<strong>Nội dung:</strong> ${data.description}
+			  </li>
+			  <li>
+				<strong>Trạng thái:</strong> ${data.status}
+			  </li>
+			  <li>
+				<strong style="color: red; font-size: 18px;">Trả lời:</strong> ${data.traloi}
+			  </li>
+			</ul>
+		  </div>
+		`,
+	  };
+	  
+
+	await transporter.sendMail(mainOptions);
+};

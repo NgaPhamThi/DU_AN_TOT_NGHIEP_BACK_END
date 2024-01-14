@@ -5,8 +5,8 @@ export const sendMail = async (data) => {
 		// config mail server
 		service: 'Gmail',
 		auth: {
-			user: 'quangpn1254@gmail.com',
-			pass: 'kvqhpmnuubestlbv',
+			user: 'shopthoitrangnamTND@gmail.com',
+			pass: 'iasmrtjftlfikctp',
 		},
 		tls: {
 			rejectUnauthorized: false,
@@ -41,8 +41,8 @@ export const sendMail1 = async (data) => {
 		// config mail server
 		service: 'Gmail',
 		auth: {
-			user: 'quangpn1254@gmail.com',
-			pass: 'kvqhpmnuubestlbv',
+			user: 'shopthoitrangnamTND@gmail.com',
+			pass: 'iasmrtjftlfikctp',
 		},
 		tls: {
 			rejectUnauthorized: false,
@@ -52,7 +52,7 @@ export const sendMail1 = async (data) => {
 		from: data.fullname,
 		to: data.email,
 		subject: 'Cảm ơn bạn đã liên hệ',
-		text: 'Hi!',
+		text: `Xin chào ${data.name},\n\nCảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ xem xét và trả lời sớm nhất có thể.\n\nTrân trọng,\nĐội ngũ hỗ trợ`,
 		html: `
 		  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
 			<h2 style="color: #333; text-align: center;">Bạn có một tin nhắn mới</h2>
@@ -77,6 +77,7 @@ export const sendMail1 = async (data) => {
 			  </li>
 			</ul>
 		  </div>
+		  
 		`,
 	  };
 	  

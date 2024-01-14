@@ -21,4 +21,8 @@ router.get('/analytic-products', analyticController.countProducts);
 router.get('/analytic-users', analyticController.countUsers);
 router.get('/analytic-numbes', analyticController.counts);
 
+router.get('/top-product', analyticController.getTopProducts);
+router.get('/top-product-by-week', analyticController.getTopProductsByWeek);
+router.get('/top-product-by-month', analyticController.getTopProductsByMonth);
+router.get('/top-product-by-year', analyticController.getTopProductsByYear);
 export default router;

@@ -504,4 +504,131 @@ export const analyticController = {
 			return res.status(500).json({ error });
 		}
 	},
+
+	getTop10Products: async (req, res, status) => {
+		try {
+			const result = await Order.aggregate([
+				{
+					$match: { status },
+				},
+				{
+					$unwind: '$orderDetails',
+				},
+				{
+					$group: {
+						_id: '$orderDetails.productId',
+						totalQuantity: { $sum: '$orderDetails.quantity' },
+					},
+				},
+				{
+					$sort: { totalQuantity: -1 },
+				},
+				{
+					$limit: 10,
+				},
+			]);
+			const productIds = result.map((item) => item._id);
+			const topProducts = await product.find({ _id: { $in: productIds } });
+			const data = topProducts.map((product) => {
+				const item = result.find((item) => item._id.toString() === product._id.toString());
+				return {
+					_id: product._id,
+					name: product.name,
+					totalQuantity: item.totalQuantity,
+				};
+			});
+			return data;
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	},
+
+	/* getTop10CompletedProducts */
+	getTopProducts: async (req, res) => {
+		const resultCompleted = await analyticController.getTop10Products(req, res, orderStatus.COMPLETED);
+		const resultCancelled = await analyticController.getTop10Products(req, res, orderStatus.CANCELLED);
+		return res.status(200).json({
+			completed: resultCompleted,
+			cancelled: resultCancelled,
+		});
+	},
+
+	/* get top 10 week */
+	getTopProduct: async (timeUnit, status) => {
+		try {
+			const result = await Order.aggregate([
+				{
+					$match: { status },
+				},
+				{
+					$unwind: '$orderDetails',
+				},
+				{
+					$group: {
+						_id: {
+							productId: '$orderDetails.productId',
+							[timeUnit]: { [`$${timeUnit}`]: '$orderDate' },
+						},
+						totalQuantity: { $sum: '$orderDetails.quantity' },
+					},
+				},
+				{
+					$sort: { totalQuantity: -1 },
+				},
+				{
+					$group: {
+						_id: `$_id.${timeUnit}`,
+						topProducts: {
+							$push: {
+								productId: '$_id.productId',
+								totalQuantity: '$totalQuantity',
+							},
+						},
+					},
+				},
+				{
+					$project: {
+						_id: 0,
+						[timeUnit]: '$_id',
+						topProducts: { $slice: ['$topProducts', 10] },
+					},
+				},
+			]);
+
+			const productIds = result[0].topProducts.map((item) => item.productId);
+			const topProducts = await product.find({ _id: { $in: productIds } });
+			const data = topProducts.map((product) => {
+				const item = result[0].topProducts.find((item) => item.productId.toString() === product._id.toString());
+				return {
+					_id: product._id,
+					name: product.name,
+					totalQuantity: item.totalQuantity,
+				};
+			});
+			return data;
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	},
+
+	// Call the function to get the top products by week
+	getTopProductsByWeek: async (req, res) => {
+		const resultCompleted = await analyticController.getTopProduct('isoWeek', orderStatus.COMPLETED);
+		const resultCancelled = await analyticController.getTopProduct('isoWeek', orderStatus.CANCELLED);
+		return res.status(200).json({ completed: resultCompleted, cancelled: resultCancelled });
+	},
+
+	// Call the function to get the top products by month
+	getTopProductsByMonth: async (req, res) => {
+		const resultCompleted = await analyticController.getTopProduct('month', orderStatus.COMPLETED);
+		const resultCancelled = await analyticController.getTopProduct('month', orderStatus.CANCELLED);
+		return res.status(200).json({ completed: resultCompleted, cancelled: resultCancelled });
+	},
+
+	// Call the function to get the top products by year
+	getTopProductsByYear: async (req, res) => {
+		const resultCompleted = await analyticController.getTopProduct('year', orderStatus.COMPLETED);
+		const resultCancelled = await analyticController.getTopProduct('year', orderStatus.CANCELLED);
+		return res.status(200).json({ completed: resultCompleted, cancelled: resultCancelled });
+	},
 };

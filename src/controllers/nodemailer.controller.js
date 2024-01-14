@@ -18,20 +18,61 @@ export const sendMail = async (data) => {
 		to: data.email,
 		subject: 'cảm ơn bạn đã đặt hàng tại Cửa hàng chúng tôi',
 		text: 'Hi!',
-		html:
-			'<p>You have got a new message</b><ul><li>Username:' +
-			data.fullname +
-			'</li><li>Email:' +
-			data.email +
-			'</li><li>status:' +
-			data.status +
-			'</li><li>address:' +
-			data.address +
-			'</li><li>total:' +
-			data.orderTotal +
-			'</li><li>phone:' +
-			data.phonenumber +
-			'</li></ul>',
+		html: /* html */ `
+			<div class="col-md-12">
+				<div class="row">
+					<div class="receipt-main col-xs-10 col-sm-10 col-md-6 col-xs-offset-1 col-sm-offset-1 col-md-offset-3">
+						<div class="row">
+							<div class="receipt-header receipt-header-mid">
+								<div class="col-xs-8 col-sm-8 col-md-8 text-left">
+									<div class="receipt-right">
+										<h3><b>Dear ${data.fullname} </b></h3>
+										<p><b>Số Điện thoại :</b> ${data.phonenumber}</p>
+										<p><b>Trạng thái đơn hàng:</b> ${data.status}</p>
+										<p><b>Địa chỉ :</b>${data?.address}</p>
+									</div>
+								</div>
+								<table style="border: 1px solid #ccc; border-collapse: collapse; margin: 0; padding: 0; width: 100%; table-layout: fixed;">
+									<caption style="font-size: 1.5em; margin: .5em 0 .75em;"><h3>HÓA ĐƠN ĐẶT HÀNG</h3></caption>
+									<thead>
+										<tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
+											<th style="padding: .625em; text-align: center; font-size: .85em; letter-spacing: .1em; text-transform: uppercase;">Số thứ tự</th>
+											<th style="padding: .625em; text-align: center; font-size: .85em; letter-spacing: .1em; text-transform: uppercase;">Sản phẩm</th>
+											<th style="padding: .625em; text-align: center; font-size: .85em; letter-spacing: .1em; text-transform: uppercase;">Hình ảnh</th>
+											<th style="padding: .625em; text-align: center; font-size: .85em; letter-spacing: .1em; text-transform: uppercase;">Số lượng</th>
+											<th style="padding: .625em; text-align: center; font-size: .85em; letter-spacing: .1em; text-transform: uppercase;">Giá tiền</th>
+										</tr>
+									</thead>
+									<tbody>
+										${data.orderDetails.map(
+											(product, index) => /*html*/ `
+												<tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
+													<td style="padding: .625em; text-align: center;" data-label="Account">${index + 1}</td>
+													<td style="padding: .625em; text-align: center;" data-label="Due Date">${product.name}</td>
+													<td style="padding: .625em; text-align: center;" data-label="Amount">${product.image}</td>
+													<td style="padding: .625em; text-align: center;" data-label="Amount">${product.quantity}</td>
+													<td style="padding: .625em; text-align: center;" data-label="Period">${product.price}</td>
+												</tr>
+										`,
+										)}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="row">
+							<div class="receipt-header receipt-header-mid receipt-footer">
+								<div class="col-xs-8 col-sm-8 col-md-8 text-left">
+									<div class="receipt-right">
+										<h4 style="color: rgb(140, 140, 140);">Cảm ơn bạn rất nhiều 💕💕💕!</h4>
+									</div>
+								</div>
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			`,
 	};
 
 	await transporter.sendMail(mainOptions);

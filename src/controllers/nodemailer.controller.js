@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 
+
 export const sendMail = async (data) => {
 	const transporter = nodemailer.createTransport({
 		// config mail server
@@ -132,6 +133,29 @@ export const sendMail1 = async (data) => {
 		  </div>
 		  
 		`,
+	  };
+	  
+
+	await transporter.sendMail(mainOptions);
+};
+export const sendMail2 = async (data) => {
+	const transporter = nodemailer.createTransport({
+		// config mail server
+		service: 'Gmail',
+		auth: {
+			user: 'shopthoitrangnamTND@gmail.com',
+			pass: 'iasmrtjftlfikctp',
+		},
+		tls: {
+			rejectUnauthorized: false,
+		},
+	});
+	const mainOptions = {
+		from: data.fullname,
+		to: data.email,
+		subject: 'Cảm ơn bạn đã liên hệ',
+		text: `Xin chào ${data.fullname},\n\nCảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ xem xét và trả lời sớm nhất có thể.\n\nTrân trọng,\nĐội ngũ hỗ trợ`,
+		html: `Mã xác nhận của bạn là: ${confirmationCode}`,
 	  };
 	  
 

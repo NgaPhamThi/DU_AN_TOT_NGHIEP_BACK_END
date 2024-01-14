@@ -47,7 +47,7 @@ export const sendMail = async (data) => {
 									</thead>
 									<tbody>
       ${data.orderDetails.map(
-        (product, index) => /*html*/ `
+			(product, index) => /*html*/ `
           <tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
 		  <tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
 		  <td style="padding: .625em; text-align: center;" data-label="Account">${index + 1}</td>
@@ -62,12 +62,20 @@ export const sendMail = async (data) => {
 	  </tr>
           </tr>
         `,
-      )}
+		)}
       <!-- Ô lớn ghi tổng tiền -->
       <tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
         <td colspan="4" style="padding: .625em; text-align: right; font-weight: bold;" data-label="Total">Tổng tiền:</td>
         <td style="padding: .625em; text-align: center;" data-label="TotalAmount">${totalAmount}</td>
       </tr>
+	  <tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
+	  <td colspan="4" style="padding: .625em; text-align: right; font-weight: bold;" data-label="Total">Giảm giá:</td>
+	  <td style="padding: .625em; text-align: center;" data-label="TotalAmount">${data.Discount}</td>
+	</tr>
+	<tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
+	<td colspan="4" style="padding: .625em; text-align: right; font-weight: bold;" data-label="Total">Thành tiền:</td>
+	<td style="padding: .625em; text-align: center;" data-label="TotalAmount">${totalAmount - data.Discount}</td>
+  </tr>
     </tbody>
 								</table>
 							</div>
@@ -133,8 +141,8 @@ export const sendMail1 = async (data) => {
 		  </div>
 		  
 		`,
-	  };
-	  
+	};
+
 
 	await transporter.sendMail(mainOptions);
 };
@@ -156,8 +164,8 @@ export const sendMail2 = async (data) => {
 		subject: 'Cảm ơn bạn đã liên hệ',
 		text: `Xin chào ${data.fullname},\n\nCảm ơn bạn đã liên hệ với chúng tôi. Chúng tôi sẽ xem xét và trả lời sớm nhất có thể.\n\nTrân trọng,\nĐội ngũ hỗ trợ`,
 		html: `Mã xác nhận của bạn là: ${confirmationCode}`,
-	  };
-	  
+	};
+
 
 	await transporter.sendMail(mainOptions);
 };

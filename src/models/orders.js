@@ -50,6 +50,9 @@ const ordersSchema = new mongoose.Schema({
 			sizeId: { type: mongoose.Schema.Types.ObjectId },
 			voucherId: { type: mongoose.Schema.Types.ObjectId },
 			colorId: { type: mongoose.Schema.Types.ObjectId },
+			name: { type: String, required: true }, // Thêm trường name
+            img: { type: [{ type: String, required: true }] }
+			 // Thêm trường img, giả sử có nhiều ảnh
 		}
 	],
 });

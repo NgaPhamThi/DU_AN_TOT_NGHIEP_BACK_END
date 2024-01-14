@@ -12,6 +12,7 @@ export const sendMail = async (data) => {
 			rejectUnauthorized: false,
 		},
 	});
+	const totalAmount = data.orderDetails.reduce((acc, product) => acc + product.price * product.quantity, 0);
 	const mainOptions = {
 		// thiết lập đối tượng, nội dung gửi mail
 		from: data.fullname,
@@ -44,18 +45,27 @@ export const sendMail = async (data) => {
 										</tr>
 									</thead>
 									<tbody>
-										${data.orderDetails.map(
-											(product, index) => /*html*/ `
-												<tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
-													<td style="padding: .625em; text-align: center;" data-label="Account">${index + 1}</td>
-													<td style="padding: .625em; text-align: center;" data-label="Due Date">${product.name}</td>
-													<td style="padding: .625em; text-align: center;" data-label="Amount">${product.image}</td>
-													<td style="padding: .625em; text-align: center;" data-label="Amount">${product.quantity}</td>
-													<td style="padding: .625em; text-align: center;" data-label="Period">${product.price}</td>
-												</tr>
-										`,
-										)}
-									</tbody>
+      ${data.orderDetails.map(
+        (product, index) => /*html*/ `
+          <tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
+		  <tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
+		  <td style="padding: .625em; text-align: center;" data-label="Account">${index + 1}</td>
+		  <td style="padding: .625em; text-align: center;" data-label="Due Date">${product.name}</td>
+		  <td style="padding: .625em; text-align: center;" data-label="Amount">  <img src=${product.img} alt="" /></td>
+		
+		  <td style="padding: .625em; text-align: center;" data-label="Amount">${product.quantity}</td>
+		  <td style="padding: .625em; text-align: center;" data-label="Period">${product.price * product.quantity}</td>
+		  
+	  </tr>
+          </tr>
+        `,
+      )}
+      <!-- Ô lớn ghi tổng tiền -->
+      <tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
+        <td colspan="4" style="padding: .625em; text-align: right; font-weight: bold;" data-label="Total">Tổng tiền:</td>
+        <td style="padding: .625em; text-align: center;" data-label="TotalAmount">${totalAmount}</td>
+      </tr>
+    </tbody>
 								</table>
 							</div>
 						</div>

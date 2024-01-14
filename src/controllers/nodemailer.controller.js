@@ -51,7 +51,9 @@ export const sendMail = async (data) => {
 		  <tr style="background-color: #f8f8f8; border: 1px solid #ddd; padding: .35em;">
 		  <td style="padding: .625em; text-align: center;" data-label="Account">${index + 1}</td>
 		  <td style="padding: .625em; text-align: center;" data-label="Due Date">${product.name}</td>
-		  <td style="padding: .625em; text-align: center;" data-label="Amount">  <img src=${product.img} alt="" /></td>
+		  <td style="padding: .625em; text-align: center;" data-label="Amount">
+  <img src="${product.img[0]}" alt="" style="width: 100px; height: 100px;" />
+</td>
 		
 		  <td style="padding: .625em; text-align: center;" data-label="Amount">${product.quantity}</td>
 		  <td style="padding: .625em; text-align: center;" data-label="Period">${product.price * product.quantity}</td>

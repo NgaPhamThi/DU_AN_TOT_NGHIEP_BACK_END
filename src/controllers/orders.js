@@ -91,13 +91,14 @@ export const CreateOrder = async (req, res) => {
 export const CreateOrderNoUserId = async (req, res) => {
   try {
 
-    const { fullname, phonenumber, email, address, orderTotal, orderDetails } = req.body;
+    const { fullname, Discount,phonenumber, email, address, orderTotal, orderDetails } = req.body;
 
     const newOrder = new Order({
       fullname,
       email,
       phonenumber,
       address,
+      Discount,
       orderTotal,
       orderDetails: req.body.orderDetails,
     });

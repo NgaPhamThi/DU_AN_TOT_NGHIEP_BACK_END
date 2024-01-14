@@ -1,7 +1,7 @@
 import User from "../models/users";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import {  siginSchema, signupSchema } from "../schemas/users";
+import {  changePasswordSchema, siginSchema, signupSchema } from "../schemas/users";
 import nodemailer from 'nodemailer';
 // import { sendMail2 } from './nodemailer.controller';
 
@@ -141,7 +141,39 @@ export const removeUser = async (req, res) => {
       });
   }
 };
-
+export const changePassword = async (req, res) => {
+  try {
+    const { error } = changePasswordSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      const errors = error.details.map((err) => err.message);
+      return res.status(400).json({
+        message: errors,
+      });
+    }
+    const user = await User.findById(req.params.id)
+    if(!user){
+      return res.status(404).json({
+        message: "User not found",
+      })
+    }
+    const isPasswordValid = await bcrypt.compare(req.body.currentPassword,user.password)
+    if(!isPasswordValid){
+      return res.status(404).json({
+        message: "Current password is incorrect",
+    })
+  }
+  const hashedNewPassword = await bcrypt.hash(req.body.newPassword,10)
+  user.password = hashedNewPassword
+  await user.save()
+  return res.status(200).json({
+    message: "Password changed successfully",
+  })
+  } catch (error) {
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+}
 export const updateUser = async (req, res) => {
   try {
     const data = await User.findByIdAndUpdate(req.params.id, req.body, {

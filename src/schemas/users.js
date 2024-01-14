@@ -32,3 +32,8 @@ export const siginSchema = joi.object({
   }),
 
 });
+export const changePasswordSchema = joi.object({
+    currentPassword: joi.string().required().min(6),
+    newPassword: joi.string().required().min(6),
+    confirmPassword: joi.string().required().valid(joi.ref('newPassword')),
+  });

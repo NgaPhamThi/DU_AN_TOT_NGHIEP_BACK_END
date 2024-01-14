@@ -529,14 +529,17 @@ export const analyticController = {
 			]);
 			const productIds = result.map((item) => item._id);
 			const topProducts = await product.find({ _id: { $in: productIds } });
+		// console.log(topProducts)
 			const data = topProducts.map((product) => {
 				const item = result.find((item) => item._id.toString() === product._id.toString());
 				return {
 					_id: product._id,
 					name: product.name,
+					img: product.img,
 					totalQuantity: item.totalQuantity,
 				};
 			});
+			console.log(data);
 			return data;
 		} catch (error) {
 			console.error('Error:', error);
@@ -572,6 +575,7 @@ export const analyticController = {
 						totalQuantity: { $sum: '$orderDetails.quantity' },
 					},
 				},
+				
 				{
 					$sort: { totalQuantity: -1 },
 				},
@@ -602,6 +606,7 @@ export const analyticController = {
 				return {
 					_id: product._id,
 					name: product.name,
+					img: product.img,
 					totalQuantity: item.totalQuantity,
 				};
 			});

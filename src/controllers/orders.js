@@ -52,7 +52,9 @@ export const CreateOrder = async (req, res) => {
         price: detail.price,
         sizeId: detail.sizeId,
         voucherId: detail.voucherId,
-        colorId: detail.colorId
+        colorId: detail.colorId,
+        name: detail.name, // Thêm trường name
+        img: detail.img, // Thêm trường img
       });
       await orderDetail.save();
       const product = await Product.findById(detail.productId);
@@ -107,7 +109,9 @@ export const CreateOrderNoUserId = async (req, res) => {
         price: detail.price,
         sizeId: detail.sizeId,
         voucherId: detail.voucherId,
-        colorId: detail.colorId
+        colorId: detail.colorId,
+        name: detail.name, // Thêm trường name
+        img: detail.img, // Thêm trường img
       });
       await orderDetail.save();
       const product = await Product.findById(detail.productId);

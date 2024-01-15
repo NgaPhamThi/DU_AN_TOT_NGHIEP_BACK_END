@@ -7,10 +7,6 @@ export const orderStatus = {
 	COMPLETED: 'COMPLETED', //'giao hàng thành công',
 	CANCELLED: 'CANCELLED', //'Hủy đơn hàng',
 };
-export const paymentStatus = {
-	PAID: 'Đã thanh toán',
-	UNPAID: 'Chưa thanh toán',
-};
 const ordersSchema = new mongoose.Schema({
 	userId: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -51,10 +47,9 @@ const ordersSchema = new mongoose.Schema({
 		required: true,
 	},
 	isPaid: {
-		type: String,
-		enum: [paymentStatus.PAID, paymentStatus.UNPAID],
-		default: paymentStatus.UNPAID,
-	},
+		type: Boolean,
+		default: false,
+	  },
 	orderDetails: [
 		{
 			productId: { type: mongoose.Schema.Types.ObjectId, required: true },

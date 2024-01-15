@@ -32,7 +32,7 @@ export const CreateOrder = async (req, res) => {
         message: error.details.map((err) => err.message),
       });
     }
-    const { userId, fullname,Discount, phonenumber, email, address, orderTotal, orderDetails } = req.body;
+    const { userId, fullname,Discount, phonenumber, isPaid, email, address, orderTotal, orderDetails } = req.body;
 
     const newOrder = new Order({
       userId,
@@ -41,6 +41,7 @@ export const CreateOrder = async (req, res) => {
       phonenumber,
       Discount,
       address,
+      isPaid,
       orderTotal,
       orderDetails: req.body.orderDetails,
     });

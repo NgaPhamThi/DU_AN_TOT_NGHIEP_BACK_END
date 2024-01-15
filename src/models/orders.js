@@ -7,6 +7,10 @@ export const orderStatus = {
 	COMPLETED: 'COMPLETED', //'giao hàng thành công',
 	CANCELLED: 'CANCELLED', //'Hủy đơn hàng',
 };
+export const paymentStatus = {
+	PAID: 'Đã thanh toán',
+	UNPAID: 'Chưa thanh toán',
+};
 const ordersSchema = new mongoose.Schema({
 	userId: {
 		type: mongoose.Schema.Types.ObjectId,
@@ -45,7 +49,12 @@ const ordersSchema = new mongoose.Schema({
 	Discount: {
 		type: Number,
 		required: true,
-	  },
+	},
+	isPaid: {
+		type: String,
+		enum: [paymentStatus.PAID, paymentStatus.UNPAID],
+		default: paymentStatus.UNPAID,
+	},
 	orderDetails: [
 		{
 			productId: { type: mongoose.Schema.Types.ObjectId, required: true },
@@ -55,8 +64,8 @@ const ordersSchema = new mongoose.Schema({
 			voucherId: { type: mongoose.Schema.Types.ObjectId },
 			colorId: { type: mongoose.Schema.Types.ObjectId },
 			name: { type: String, required: true }, // Thêm trường name
-            img: { type: [{ type: String, required: true }] }
-			 // Thêm trường img, giả sử có nhiều ảnh
+			img: { type: [{ type: String, required: true }] }
+			// Thêm trường img, giả sử có nhiều ảnh
 		}
 	],
 });

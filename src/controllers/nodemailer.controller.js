@@ -30,6 +30,7 @@ export const sendMail = async (data) => {
 									<div class="receipt-right">
 										<h3><b>Dear ${data.fullname} </b></h3>
 										<p><b>Số Điện thoại :</b> ${data.phonenumber}</p>
+										<p><b>Mã hóa đơn :</b> ${data._id}</p>
 										<p><b>Trạng thái đơn hàng:</b> ${data.status}</p>
 										<p><b>Thanh toán:</b> ${data.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}</p>
 										<p><b>Địa chỉ :</b>${data?.address}</p>

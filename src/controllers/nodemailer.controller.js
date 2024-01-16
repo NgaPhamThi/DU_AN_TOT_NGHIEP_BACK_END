@@ -31,7 +31,7 @@ export const sendMail = async (data) => {
 										<h3><b>Dear ${data.fullname} </b></h3>
 										<p><b>Số Điện thoại :</b> ${data.phonenumber}</p>
 										<p><b>Trạng thái đơn hàng:</b> ${data.status}</p>
-										<p><b>Thanh toán:</b> ${data.isPaid}</p>
+										<p><b>Thanh toán:</b> ${data.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}</p>
 										<p><b>Địa chỉ :</b>${data?.address}</p>
 									</div>
 								</div>

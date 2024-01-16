@@ -60,7 +60,7 @@ export const Vnpay = (req, res) => {
 		.toDate()
 		.getTime()}&fullname=${req.body.fullname}&email=${req.body.email}&address=${
 		req.body.address
-	}&phone=${req.body.phonenumber}&total=${req.body.orderTotal}&discount=${req.body.Discount}`;
+	}&phone=${req.body.phonenumber}&total=${req.body.orderTotal}&discount=${req.body.Discount}&isPaid=${req.body.isPaid}`;
 	vnp_Params['vnp_IpAddr'] = ipAddr;
 
 	vnp_Params = sortObject(vnp_Params);

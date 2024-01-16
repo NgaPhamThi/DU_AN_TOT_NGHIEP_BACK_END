@@ -5,6 +5,7 @@ export const OrdersSchema = joi.object({
 	fullname: joi.string().required(),
 	userId: joi.string().required(),
 	email: joi.string().required(),
+	isPaid: joi.boolean().required(),
 	Discount: joi.number().required(),
 	phonenumber: joi.string().required(),
 	orderTotal: joi.number().required(),

@@ -1,6 +1,6 @@
 const a = {
-    "vnp_TmnCode": "KR1JEPEA",
-    "vnp_HashSecret":"WMUUNBCSYYTTOJXMAXVJVWVEUAQJJZDO",
+    "vnp_TmnCode": "I132OD5T",
+    "vnp_HashSecret":"MLWCWESVUEUERXAMZZPOEPXRZYGLYIDZ",
     "vnp_Url":"https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
     "vnp_ReturnUrl":"http://localhost:5173/successful"
 }

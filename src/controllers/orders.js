@@ -5,6 +5,72 @@ import { OrdersSchema } from "../schemas/orders";
 import Voucher from "../models/voucher";
 import nodemailer from 'nodemailer';
 import { sendMail } from './nodemailer.controller';
+export const CreateOrderVnpay = async (req, res) => {
+  try {
+    const { error } = OrdersSchema.validate(req.body, { abortEarly: false });
+    if (error) {
+      return res.status(400).json({
+        message: error.details.map((err) => err.message),
+      });
+    }
+    const { userId, fullname,Discount, phonenumber, email, address, orderTotal, orderDetails,  } = req.body;
+
+    const newOrder = new Order({
+      userId,
+      fullname,
+      email,
+      phonenumber,
+      Discount,
+      address,
+      isPaid: false,
+      orderTotal,
+      orderDetails: req.body.orderDetails,
+    });
+    newOrder.isPaid = true;
+    await newOrder.save();
+    await Promise.all(orderDetails.map(async (detail) => {
+      const orderDetail = new OderDetail({
+        orderId: newOrder._id,
+        productId: detail.productId,
+        quantity: detail.quantity,
+        price: detail.price,
+        sizeId: detail.sizeId,
+        voucherId: detail.voucherId,
+        colorId: detail.colorId,
+        name: detail.name, // Thêm trường name
+        img: detail.img[0], // Thêm trường img
+      });
+      await orderDetail.save();
+      const product = await Product.findById(detail.productId);
+      const sizeAndColor = product.sizeAndcolor.find(entry =>
+        entry.sizeId.equals(detail.sizeId) && entry.colorId.equals(detail.colorId)
+      );
+      if (sizeAndColor && sizeAndColor.quantity >= detail.quantity) {
+        sizeAndColor.quantity -= detail.quantity;
+        await product.save();
+        const voucher = await Voucher.findById(detail.voucherId)
+        if (voucher && voucher.Quantity > 0) {
+          voucher.Quantity -= 1;
+          await voucher.save();
+        } else {
+          // Handle case where voucher is not found or quantity is 0
+          console.error('Voucher not found or out of stock:', voucher);
+        }
+      } else {
+        console.error('Invalid sizeId, colorId, or insufficient quantity for product:', product);
+      }
+
+    })
+    );
+
+    
+    await sendMail(newOrder);
+
+    res.status(201).json(newOrder);
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+}
 // export const createOrder = async (req, res) => {
 //   try {
 //     const { error } = OrdersSchema.validate(req.body, { abortEarly: false });
@@ -44,7 +110,7 @@ export const CreateOrder = async (req, res) => {
       isPaid,
       orderTotal,
       orderDetails: req.body.orderDetails,
-      isPaid: paymentMethod === 'VNPAY',
+      isPaid: paymentMethod === 'vnpay',
     });
     await newOrder.save();
     await Promise.all(orderDetails.map(async (detail) => {

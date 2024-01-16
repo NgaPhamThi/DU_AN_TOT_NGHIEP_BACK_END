@@ -6,8 +6,8 @@ export const sendMail = async (data) => {
 		// config mail server
 		service: 'Gmail',
 		auth: {
-			user: 'shopthoitrangnamTND@gmail.com',
-			pass: 'iasmrtjftlfikctp',
+			user: 'quangpn1254@gmail.com',
+			pass: 'hzkvibesplzvfzcp',
 		},
 		tls: {
 			rejectUnauthorized: false,
@@ -105,8 +105,8 @@ export const sendMail1 = async (data) => {
 		// config mail server
 		service: 'Gmail',
 		auth: {
-			user: 'shopthoitrangnamTND@gmail.com',
-			pass: 'iasmrtjftlfikctp',
+			user: 'quangpn1254@gmail.com',
+			pass: 'hzkvibesplzvfzcp',
 		},
 		tls: {
 			rejectUnauthorized: false,
@@ -153,8 +153,8 @@ export const sendMail2 = async (data) => {
 		// config mail server
 		service: 'Gmail',
 		auth: {
-			user: 'shopthoitrangnamTND@gmail.com',
-			pass: 'iasmrtjftlfikctp',
+			user: 'quangpn1254@gmail.com',
+			pass: 'hzkvibesplzvfzcp',
 		},
 		tls: {
 			rejectUnauthorized: false,

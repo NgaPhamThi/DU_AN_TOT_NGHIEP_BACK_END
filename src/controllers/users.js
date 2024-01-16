@@ -197,8 +197,8 @@ export const updateUser = async (req, res) => {
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
-      user: 'shopthoitrangnamTND@gmail.com',
-      pass: 'iasmrtjftlfikctp',
+      user: 'quangpn1254@gmail.com',
+      pass: 'hzkvibesplzvfzcp',
   },
   tls: {
       rejectUnauthorized: false,

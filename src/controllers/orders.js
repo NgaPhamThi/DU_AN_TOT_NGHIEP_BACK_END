@@ -386,6 +386,11 @@ export const updateOrderStatus = async (req, res) => {
         { status: req.body.status },
         { new: true }
       );
+      if (req.body.status === 'COMPLETED' && !updateOrdersStatus.isPaid) {
+        // Chuyển trạng thái isPaid thành true khi đơn hàng chuyển sang COMPLETED
+        updateStatus.isPaid =true;
+        await updateStatus.save();
+      }
       await sendMail(updateStatus);
       res.json(updateStatus);
     } else {

@@ -159,7 +159,7 @@ export const CreateOrder = async (req, res) => {
 export const CreateOrderNoUserId = async (req, res) => {
   try {
 
-    const { fullname, Discount,phonenumber, email, address, orderTotal, orderDetails } = req.body;
+    const { fullname, Discount,phonenumber,isPaid, email, address, orderTotal, orderDetails,paymentMethod } = req.body;
 
     const newOrder = new Order({
       fullname,
@@ -168,7 +168,9 @@ export const CreateOrderNoUserId = async (req, res) => {
       address,
       Discount,
       orderTotal,
+      isPaid,
       orderDetails: req.body.orderDetails,
+      isPaid: paymentMethod === 'vnpay',
     });
     await newOrder.save();
     await Promise.all(orderDetails.map(async (detail) => {
